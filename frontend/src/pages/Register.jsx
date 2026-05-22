@@ -5,10 +5,13 @@ import { IoMdEye } from "react-icons/io";
 import toast from "react-hot-toast";
 import Axios from "../utls/Axios";
 import SummaryApi from "../common/SummaryApi";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import AxiosToastError from "../utls/AxiosToastError";
 
 
 const Register = () => {
+  const navigate = useNavigate();
+
   const [data, setData] = useState({
     name: "",
     email: "",

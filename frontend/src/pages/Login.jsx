@@ -5,10 +5,13 @@ import { IoMdEye } from "react-icons/io";
 import toast from "react-hot-toast";
 import Axios from "../utls/Axios";
 import SummaryApi from "../common/SummaryApi";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import AxiosToastError from "../utls/AxiosToastError";
 
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const [data, setData] = useState({
     
     email: "",
@@ -37,6 +40,8 @@ const Login = () => {
 
             if(response.data.success){
                 toast.success(response.data.message)
+                localStorage.setItem('acesstoken',response.data.data.accesstoken)
+                localStorage.setItem('refreshToken',response.data.data.refreshToken)
                 setData({
                    
                     email : "",
