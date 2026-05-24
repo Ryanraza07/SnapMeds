@@ -1,4 +1,5 @@
-export const baseUrl = "http://localhost:8000"
+export const baseUrl =
+    import.meta.env.VITE_API_BASE_URL || "http://localhost:8000"
 
 const SummaryApi = {
     register: {
@@ -20,6 +21,14 @@ const SummaryApi = {
     resetPasswordController:{
         url:'/api/user/reset-password',
         method:'put'
+    },
+    refreshToken:{
+        url:'/api/user/refresh-token',
+        method:'post'
+    },
+    userDetails:{
+        url:'/api/user/user-details',
+        method:'get'
     }
   
 }

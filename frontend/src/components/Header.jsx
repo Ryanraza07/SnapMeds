@@ -3,12 +3,15 @@ import logo1 from '../assets/logo1.png'
 import Search from './Search'
 import { Link,Navigate,useNavigate } from 'react-router'
 import { FaUserCircle } from "react-icons/fa";
-import { IoBagAdd } from "react-icons/io5";
+import { FaCartPlus } from "react-icons/fa";
+import { TiArrowSortedDown } from "react-icons/ti";
+import { useSelector } from 'react-redux';
+
 
 
 const header = () => {
  
-
+ const user = useSelector((state)=> state?.user)
   const navigate = useNavigate();
 const redirectToRegister =() =>{
   navigate("/Register")
@@ -49,12 +52,23 @@ const redirectToLoginPage = () =>{
      <div>
        <button onClick={redirectToRegister} className='text-neutral-600 lg:hidden'  ><FaUserCircle size={40} /></button>
            <div className='hidden lg:flex items-center gap-10'>
-           <button onClick={redirectToLoginPage}>
+            {
+              user?._id ? (
+
+                <div>
+                  <div className='flex items-center gap-2'>
+                    <p>Account</p>
+                    <TiArrowSortedDown />
+                  </div>
+                </div>
+              ): <button onClick={redirectToLoginPage}>
            Login
            </button>
+            }
+          
            <button className='flex items-center gap-2 bg-green-800 hover:bg-green-700 px-4 py-2 rounded text-white'>
             <div className='animate-bounce'>
-            <IoBagAdd size={25}/>
+            <FaCartPlus size={25}/>
 
             </div>
             <div className='font-semibold'>

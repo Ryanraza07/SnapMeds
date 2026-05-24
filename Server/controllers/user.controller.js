@@ -266,7 +266,7 @@ export async  function uploadAvatar(request,response){
     }
 }
 
-// controller for user details 
+// controller for updating user details 
 export async function updateUserDetails(request,response){
     try {
         const userId = request.userId //auth middleware
@@ -542,5 +542,28 @@ export async function refreshToken(request,response){
             error : true,
             success : false
         })
+    }
+}
+
+// get login user details 
+
+export async function userDetails(request,response) {
+    try {
+        const userId = request.userId
+
+        const user = await UserModel.findById(userId).select('-password -refreshToken')
+
+        return response.json({
+            message:'user details',
+            data:user,
+            error:false,
+            success:true
+        })
+    } catch (error) {
+       return  response.status(500).json({
+          message:'something went wrong',
+          error:true,
+          sucess:false 
+       })
     }
 }
