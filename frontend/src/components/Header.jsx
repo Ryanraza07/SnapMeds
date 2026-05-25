@@ -1,18 +1,27 @@
 import React from 'react'
 import logo1 from '../assets/logo1.png'
 import Search from './Search'
-import { Link,Navigate,useNavigate } from 'react-router'
+import { Link,Navigate,useLocation,useNavigate } from 'react-router'
 import { FaUserCircle } from "react-icons/fa";
 import { FaCartPlus } from "react-icons/fa";
-import { TiArrowSortedDown } from "react-icons/ti";
+import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import UserMenu from './UserMenu';
+
 
 
 
 const header = () => {
  
- const user = useSelector((state)=> state?.user)
-  const navigate = useNavigate();
+ const user = useSelector((state)=> state?.user) 
+ const location = useLocation()
+ const isSearchPage = location.pathname === "/search"
+ const navigate = useNavigate();
+ const [openUserMenu,setOpenUserMenu] = useState(false)
+
+
+
 const redirectToRegister =() =>{
   navigate("/Register")
 }
@@ -55,11 +64,30 @@ const redirectToLoginPage = () =>{
             {
               user?._id ? (
 
-                <div>
-                  <div className='flex items-center gap-2'>
+                <div className='relative'>
+                  <div onClick={() => setOpenUserMenu(preve => !preve)} className='flex items-center select-none gap-2 cursor-pointer'>
                     <p>Account</p>
-                    <TiArrowSortedDown />
+                    {
+                      openUserMenu?(
+                        <TiArrowSortedUp  size={25}/>
+                      ):(
+                        <TiArrowSortedDown  size={25}/>
+
+                      )
+                    }
                   </div>
+
+                  {
+                    openUserMenu && (
+                           <div className='absolute right-0 top-12'>
+                     <div className='bg-white  rounded p-4  min-w-52 lg:shadow-lg'>
+                     <UserMenu/>
+
+                     </div>
+                  </div>
+                    )
+                  }
+                  
                 </div>
               ): <button onClick={redirectToLoginPage}>
            Login
