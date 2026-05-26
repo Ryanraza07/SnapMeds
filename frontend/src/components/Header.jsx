@@ -21,15 +21,21 @@ const header = () => {
  const [openUserMenu,setOpenUserMenu] = useState(false)
 
 
-
-const redirectToRegister =() =>{
-  navigate("/Register")
+const handleMobileUser = () =>{
+     if(!user._id){
+       navigate("/login")
+       return
+     }
+     navigate("/user")
 }
+
 const redirectToLoginPage = () =>{
   navigate("/Login")
 }
 
-
+const handleCloseUserMenu = ()=>{
+    setOpenUserMenu(false)
+}
 
   return (
   <header className='h-auto lg:h-20 lg:shadow-md lg:flex items-center py-4 bg-white'>
@@ -59,7 +65,7 @@ const redirectToLoginPage = () =>{
 
 
      <div>
-       <button onClick={redirectToRegister} className='text-neutral-600 lg:hidden'  ><FaUserCircle size={40} /></button>
+       <button onClick={handleMobileUser} className='text-neutral-600 lg:hidden'  ><FaUserCircle size={40} /></button>
            <div className='hidden lg:flex items-center gap-10'>
             {
               user?._id ? (
@@ -81,7 +87,7 @@ const redirectToLoginPage = () =>{
                     openUserMenu && (
                            <div className='absolute right-0 top-12'>
                      <div className='bg-white  rounded p-4  min-w-52 lg:shadow-lg'>
-                     <UserMenu/>
+                     <UserMenu close ={handleCloseUserMenu}/>
 
                      </div>
                   </div>
@@ -89,7 +95,7 @@ const redirectToLoginPage = () =>{
                   }
                   
                 </div>
-              ): <button onClick={redirectToLoginPage}>
+              ): <button onClick={redirectToLoginPage} className='cursor-pointer'>
            Login
            </button>
             }
