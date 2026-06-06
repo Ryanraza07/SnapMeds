@@ -6,6 +6,8 @@ import SummaryApi from '../common/SummaryApi'
 import Axios from '../utls/Axios'
 import { logout } from '../store/userSlice'
 import toast from 'react-hot-toast'
+import { FaExternalLinkAlt } from "react-icons/fa";
+import AxiosToastError from '../utls/AxiosToastError'
 
 const UserMenu = ({close}) => {
 
@@ -38,12 +40,15 @@ const UserMenu = ({close}) => {
       <div>
         <div className='grid gap-1'>
         <div className='font-semibold mx-1'>My Account</div>
-        <div className='text-sm mx-1'>{(user.name || user.mobile)?.charAt(0).toUpperCase()+(user.name || user.mobile)?.slice(1)}</div>
+        <span className=' mx-1 flex items-center gap-2 '>{(user.name || user.mobile)?.charAt(0).toUpperCase()+(user.name || user.mobile)?.slice(1)}
+          <Link to={"/dashboard/profile"}>
+        <FaExternalLinkAlt size={13}  className='hover:text-green-400 '/>
+        </Link></span>
         </div>
         <Dividor/>
         <div className='text-sm grid gap-2 cursor-pointer'> 
-        <Link to ={""} className='px-2 hover:bg-orange-200 py-1'>My Orders</Link>
-        <Link to = {""} className='px-2 hover:bg-orange-200 py-1'>Saved Adresses</Link>
+        <Link to ={"/dashboard/myorders"} className='px-2 hover:bg-orange-200 py-1'>My Orders</Link>
+        <Link to = {"/dashboard/address"} className='px-2 hover:bg-orange-200 py-1'>Saved Adresses</Link>
         <button onClick={handleLogout} className='text-left bg-red-100 px-2 cursor-pointer hover:bg-red-200 py-1'>Log Out</button>
         </div>
     </div>

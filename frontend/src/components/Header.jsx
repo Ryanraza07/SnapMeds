@@ -1,130 +1,120 @@
-import React from 'react'
-import logo1 from '../assets/logo1.png'
+import React, { useState } from 'react'
+import logo from '../assets/logo1.png'
 import Search from './Search'
-import { Link,Navigate,useLocation,useNavigate } from 'react-router'
-import { FaUserCircle } from "react-icons/fa";
-import { FaCartPlus } from "react-icons/fa";
-import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { FaRegCircleUser } from "react-icons/fa6";
+import useMobile from '../hooks/useMobile';
+import { BsCart4 } from "react-icons/bs";
 import { useSelector } from 'react-redux';
-import { useState } from 'react';
+import { GoTriangleDown, GoTriangleUp } from "react-icons/go";
 import UserMenu from './UserMenu';
 
+const Header = () => {
+    const [isMobile] = useMobile()
+    const location = useLocation()
+    const isSearchPage = location.pathname === "/search"
+    const navigate = useNavigate()
+    const user = useSelector((state) => state?.user)
+    const [openUserMenu, setOpenUserMenu] = useState(false)
 
+    const redirectToLoginPage = () => {
+        navigate("/login")
+    }
 
+    const handleCloseUserMenu = () => {
+        setOpenUserMenu(false)
+    }
 
-const header = () => {
- 
- const user = useSelector((state)=> state?.user) 
- const location = useLocation()
- const isSearchPage = location.pathname === "/search"
- const navigate = useNavigate();
- const [openUserMenu,setOpenUserMenu] = useState(false)
+    const handleMobileUser = () => {
+        if (!user?._id) {
+            navigate("/login")
+            return
+        }
 
+        navigate("/user")
+    }
 
-const handleMobileUser = () =>{
-     if(!user._id){
-       navigate("/login")
-       return
-     }
-     navigate("/user")
-}
-
-const redirectToLoginPage = () =>{
-  navigate("/Login")
-}
-
-const handleCloseUserMenu = ()=>{
-    setOpenUserMenu(false)
-}
-
-  return (
-  <header className='h-auto lg:h-20 lg:shadow-md lg:flex items-center py-4 bg-white'>
-
-   <div className='container flex mx-auto  lg:mt-0  items-center  px-2 justify-between'>
-    <Link to={"/"} className='h-full  flex justify-center items-center'>
-  <img 
-      
-          src = {logo1}
-          width={200}
-          height={60}
-          alt='logo'
-          className='hidden lg:block'
-   />
-   <img 
-      
-          src = {logo1}
-          width={160}
-          height={60}
-          alt='logo'
-          className='lg:hidden'
-   />
-    
-
-    </Link>
-    <div className='hidden lg:block'><Search/></div>
-
-
-     <div>
-       <button onClick={handleMobileUser} className='text-neutral-600 lg:hidden'  ><FaUserCircle size={40} /></button>
-           <div className='hidden lg:flex items-center gap-10'>
+    return (
+        <header className='h-24 lg:h-20 lg:shadow-md sticky top-0 z-40 flex flex-col justify-center gap-1 bg-white'>
             {
-              user?._id ? (
+                !(isSearchPage && isMobile) && (
+                    <div className='container mx-auto flex items-center px-2 justify-between'>
+                        <div className='h-full'>
+                            <Link to={"/"} className='h-full flex justify-center items-center'>
+                                <img
+                                    src={logo}
+                                    width={170}
+                                    height={60}
+                                    alt='logo'
+                                    className='hidden border-0 lg:block'
+                                />
+                                <img
+                                    src={logo}
+                                    width={120}
+                                    height={60}
+                                    alt='logo'
+                                    className='border-0 lg:hidden'
+                                />
+                            </Link>
+                        </div>
 
-                <div className='relative'>
-                  <div onClick={() => setOpenUserMenu(preve => !preve)} className='flex items-center select-none gap-2 cursor-pointer'>
-                    <p>Account</p>
-                    {
-                      openUserMenu?(
-                        <TiArrowSortedUp  size={25}/>
-                      ):(
-                        <TiArrowSortedDown  size={25}/>
+                        <div className='hidden lg:block'>
+                            <Search />
+                        </div>
 
-                      )
-                    }
-                  </div>
+                        <div>
+                            <button className='text-neutral-600 lg:hidden' onClick={handleMobileUser}>
+                                <FaRegCircleUser size={26} />
+                            </button>
 
-                  {
-                    openUserMenu && (
-                           <div className='absolute right-0 top-12'>
-                     <div className='bg-white  rounded p-4  min-w-52 lg:shadow-lg'>
-                     <UserMenu close ={handleCloseUserMenu}/>
+                            <div className='hidden lg:flex items-center gap-10'>
+                                {
+                                    user?._id ? (
+                                        <div className='relative'>
+                                            <div onClick={() => setOpenUserMenu((prev) => !prev)} className='flex select-none items-center gap-1 cursor-pointer'>
+                                                <p>Account</p>
+                                                {
+                                                    openUserMenu ? (
+                                                        <GoTriangleUp size={25} />
+                                                    ) : (
+                                                        <GoTriangleDown size={25} />
+                                                    )
+                                                }
+                                            </div>
+                                            {
+                                                openUserMenu && (
+                                                    <div className='absolute right-0 top-12'>
+                                                        <div className='bg-white rounded p-4 min-w-52 lg:shadow-lg'>
+                                                            <UserMenu close={handleCloseUserMenu} />
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        </div>
+                                    ) : (
+                                        <button onClick={redirectToLoginPage} className='text-lg px-2'>Login</button>
+                                    )
+                                }
 
-                     </div>
-                  </div>
-                    )
-                  }
-                  
-                </div>
-              ): <button onClick={redirectToLoginPage} className='cursor-pointer'>
-           Login
-           </button>
+                                <button className='flex items-center gap-2 bg-green-800 hover:bg-green-700 px-3 py-2 rounded text-white'>
+                                    <div className='animate-bounce'>
+                                        <BsCart4 size={26} />
+                                    </div>
+                                    <div className='font-semibold text-sm'>
+                                        <p>My Cart</p>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )
             }
-          
-           <button className='flex items-center gap-2 bg-green-800 hover:bg-green-700 px-4 py-2 rounded text-white'>
-            <div className='animate-bounce'>
-            <FaCartPlus size={25}/>
 
+            <div className='container mx-auto px-2 lg:hidden'>
+                <Search />
             </div>
-            <div className='font-semibold'>
-              <p>1 Items</p>
-              <p>Total price</p>
-            </div>
-
-           </button>
-           
-            </div>
-          </div>
-     </div>
-     <div className='container mx-auto mt-2  px-2 lg:hidden'>
-      <Search/>
-     </div>
-
-
-  
-  
-  
-  </header>
-  )
+        </header>
+    )
 }
 
-export default header
+export default Header
