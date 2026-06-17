@@ -8,6 +8,7 @@ import { logout } from '../store/userSlice'
 import toast from 'react-hot-toast'
 import { FaExternalLinkAlt } from "react-icons/fa";
 import AxiosToastError from '../utls/AxiosToastError'
+import isAdmin from '../utls/isAdmin'
 
 const UserMenu = ({close}) => {
 
@@ -47,6 +48,13 @@ const UserMenu = ({close}) => {
         </div>
         <Dividor/>
         <div className='text-sm grid gap-2 cursor-pointer'> 
+          
+              <Link to ={"/dashboard/Category"} className='px-2 hover:bg-orange-200 py-1'>Category</Link>
+          
+
+
+        <Link to ={"/dashboard/subCategory"} className='px-2 hover:bg-orange-200 py-1'>Sub Category</Link>
+        <Link to ={"/dashboard/UploadProduct"} className='px-2 hover:bg-orange-200 py-1'>Upload Product</Link>
         <Link to ={"/dashboard/myorders"} className='px-2 hover:bg-orange-200 py-1'>My Orders</Link>
         <Link to = {"/dashboard/address"} className='px-2 hover:bg-orange-200 py-1'>Saved Adresses</Link>
         <button onClick={handleLogout} className='text-left bg-red-100 px-2 cursor-pointer hover:bg-red-200 py-1'>Log Out</button>

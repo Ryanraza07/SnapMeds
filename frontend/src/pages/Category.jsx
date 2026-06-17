@@ -1,8 +1,145 @@
-import React from 'react'
-
+import React, { useEffect, useState } from 'react'
+import UploadCategoryModel from '../components/UploadCategoryModel'
+import SummaryApi from '../common/SummaryApi'
+import Loading from '../components/Loading'
+import NoData from '../components/NoData'
+import toast from 'react-hot-toast'
+import AxiosToastError from '../utls/AxiosToastError'
+import Axios from '../utls/Axios'
+import ConfirmBox from '../components/ConfirmBox'
+import EditCategory from '../components/EditCategory'
 const Category = () => {
+
+const [openUploadCategory,setOpenUploadCategory] = useState(false)
+const [loading,setloading] = useState(true)
+const [categoryData,setCategoryData] =useState([])
+const [openEdit,setOpenEdit] = useState(false)
+const [editData,setEditData] = useState({
+    name:"",
+    image:"",
+})
+const [openConfirmBoxDelete,setOpenConfirmBoxDelete] = useState(false)
+const [deleteCategory,setDeleteCategory] = useState({
+    _id: ""
+})
+
+const fetchCategory = async ()=>{
+    try {
+         setloading(true)
+        const response = await Axios({
+            ...SummaryApi.getCategory
+        })
+      
+        const { data : responseData} = response
+
+        
+
+        if(responseData.success){
+           setCategoryData(responseData.data)
+
+        }
+
+    } catch (error) {
+        
+    }finally{
+        setloading(false)
+    }
+}
+
+useEffect(()=>{
+    fetchCategory()
+},[])
+  
+const handleDeleteCategory = async ()=>{
+    try {
+        const response = await Axios({
+            ...SummaryApi.deleteCategory,
+            data: deleteCategory
+        })
+
+        const {data:responseData} = response
+
+        if(responseData.success){
+            toast.success(responseData.message)
+            
+            fetchCategory()
+            setOpenConfirmBoxDelete(false)
+        }
+    } catch (error) {
+        AxiosToastError(error)
+    }
+}
+
+
   return (
-    <div>Category</div>
+    <section className='bg-white'>
+        <div className='font-semibold p-2 shadow-md flex item-center justify-between'>
+            Category
+            <button onClick={()=>setOpenUploadCategory(true)} className='bg-green-800 px-3 py-2 rounded  p-2 text-white text-sm hover:bg-green-700'>Add Category</button>
+
+        </div>
+        {
+            !categoryData[0] && !loading && (
+                <NoData/>
+            )
+        }
+
+        <div className='p-4 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2'>
+            { 
+                categoryData.map((category,index)=>{
+                    return(
+                        <div className='w-32 h-56 rounded shadow-md' key={category._id}>
+                            <img
+                            alt={category.name}
+                            src={category.image}
+                            className='w-full object-scale-down'
+                            />
+                            <div className='items-center h-9 flex gap-2'>
+
+                                <button onClick={()=>{
+                                    setOpenEdit(true)
+                                    setEditData(category)
+                                }}className='flex-1 bg-green-100 hover:bg-green-200 text-green-600 font-medium py-1 rounded'>
+                                    Edit
+                                </button>
+                                <button onClick={()=>{
+                                    setOpenConfirmBoxDelete(true)
+                                    setDeleteCategory(category)
+                                }} className='flex-1 bg-red-100 hover:bg-red-200 text-red-600  font-medium py-1 rounded'>
+                                       Delete
+                                </button>
+                            </div>
+                            
+                            
+                        </div>
+                    )
+                })
+            }
+        </div>
+
+        {
+            openUploadCategory && (
+                <UploadCategoryModel close ={() =>setOpenUploadCategory(false)}/>
+            )
+
+        }
+        {
+            loading && (
+                <Loading/>
+            )
+        }
+        { 
+            openEdit && (
+                <EditCategory data={editData} close={()=>setOpenEdit(false)} fetchData = {fetchCategory}/>
+            )
+        }
+        {
+            openConfirmBoxDelete && (
+                <ConfirmBox close={()=> setOpenConfirmBoxDelete(false)} cancel={()=>setOpenConfirmBoxDelete(false)} confirm={handleDeleteCategory}/>
+            )
+        }
+       
+    </section>
   )
 }
 

@@ -43,6 +43,43 @@ const SummaryApi = {
         url:'/api/user/update-user',
         method:'put'
 
+    },
+    addCategory:{
+        url:'/api/category/add-category',
+        method:'post'
+    },
+    uploadImage:{
+        url : '/api/file/upload',
+        method: 'post'
+    },
+    getCategory:{
+        url:'/api/category/get-category',
+        method:'get'
+    },
+    updateCategory:{
+        url: '/api/category/update-category',
+        method:'put'
+    },
+    deleteCategory:{
+        url:'/api/category/delete-category',
+        method:'delete'
+    },
+    addSubCategory:{
+        url:'/api/subCategory/add-subCategory',
+        method:'post'
+    },
+    getSubCategory:{
+        url:'/api/subCategory/get-subCategory',
+        method: 'get'
+    },
+    updateSubCategory:{
+        url:'/api/subCategory/update-subCategory',
+        method: 'put'
+
+    },
+    deleteSubCategory:{
+        url: '/api/subCategory/delete-subCategory',
+        method:'delete'
     }
   
 }
